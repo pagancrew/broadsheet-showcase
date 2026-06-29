@@ -1,0 +1,290 @@
+[
+  {
+    "id": 0,
+    "title": "Anthropic Releases Claude 4 with Extended Context",
+    "url": "https://www.anthropic.com/news/claude-4",
+    "source": "Anthropic",
+    "category": "big_news",
+    "confidence_score": 9,
+    "summary": "Anthropic released Claude 4 with a 500k-token context window, doubling the previous limit. The model scores 87% on the MMLU benchmark, three points above Claude 3.7. For those tracking the evolution of AI interfaces, this transition signals a shift toward document-scale reasoning rather than single-query interactions. Early adopters report the model handles full codebases without truncation."
+  },
+  {
+    "id": 1,
+    "title": "OpenAI Cuts Enterprise Pricing by 40%",
+    "url": "https://techcrunch.com/2026/05/12/openai-cuts-pricing",
+    "source": "TechCrunch",
+    "category": "big_news",
+    "confidence_score": 8,
+    "summary": "OpenAI reduced API pricing for enterprise customers by 40%, effective immediately. The cut applies to GPT-4o and o3-mini tiers. For those in enterprise software development, this means production AI features that were previously cost-prohibitive are now viable at scale. Several analysts note the timing coincides with Google's Gemini Pro price drop last month."
+  },
+  {
+    "id": 2,
+    "title": "EU AI Act Enforcement Begins for High-Risk Systems",
+    "url": "https://www.techpolicy.press/eu-ai-act-enforcement",
+    "source": "Tech Policy Press",
+    "category": "laws_ethics",
+    "confidence_score": 9,
+    "summary": "The EU AI Act's enforcement provisions for high-risk systems took effect on 12 May 2026, requiring companies to register AI tools used in hiring, credit scoring, and medical diagnosis with the EU database. Fines up to 35 million euros apply for non-compliance. For observers, this serves as a stark warning that the compliance window has closed — companies that delayed registration now face enforcement action."
+  },
+  {
+    "id": 3,
+    "title": "DeepMind AlphaFold 3 Paper Published in Nature",
+    "url": "https://www.nature.com/articles/alphafold3",
+    "source": "Nature",
+    "category": "big_news",
+    "confidence_score": 10,
+    "summary": "DeepMind published the full AlphaFold 3 methodology in Nature, including training details previously withheld from the initial release. The paper describes a diffusion-based architecture that predicts protein-ligand interactions with 94% accuracy. For researchers in drug discovery, this means structural biology workflows can now include AI-predicted binding affinities rather than relying solely on costly wet lab experiments."
+  },
+  {
+    "id": 4,
+    "title": "Gary Marcus: Why Current LLMs Cannot Reason",
+    "url": "https://garymarcus.substack.com/llm-reasoning-critique",
+    "source": "Gary Marcus",
+    "category": "critical_voices",
+    "confidence_score": 7,
+    "summary": "Gary Marcus published a long-form critique arguing that benchmark improvements in reasoning tasks mask systematic failures on out-of-distribution problems. He cites 14 reproducible cases where GPT-4o fails on trivially rephrased versions of problems it solves correctly. For anyone adopting AI coding assistants, the math only works if you verify outputs — the model's confidence is not correlated with its accuracy on novel problems."
+  },
+  {
+    "id": 5,
+    "title": "Mistral Releases Mixtral 8x22B Under Apache Licence",
+    "url": "https://mistral.ai/news/mixtral-8x22b",
+    "source": "Mistral AI",
+    "category": "big_news",
+    "confidence_score": 9,
+    "summary": "Mistral released Mixtral 8x22B, a 141-billion parameter sparse mixture-of-experts model, under the Apache 2.0 licence. The model activates 39 billion parameters per forward pass and outperforms GPT-4o on the MATH benchmark. For developers building production systems, this represents the first commercially-usable open-weight model that closes the gap with frontier proprietary systems on reasoning tasks."
+  },
+  {
+    "id": 6,
+    "title": "UK's ICO Publishes AI Data Protection Guidelines",
+    "url": "https://ico.org.uk/ai-guidance-2026",
+    "source": "UK ICO",
+    "category": "laws_ethics",
+    "confidence_score": 8,
+    "summary": "The UK's Information Commissioner's Office published binding guidance on AI and data protection, requiring companies to disclose training data sources in privacy notices and offer opt-out mechanisms for automated decision-making. For those managing data compliance in UK organisations, this guidance closes a loophole that allowed AI systems to process personal data without disclosure under legacy GDPR interpretations."
+  },
+  {
+    "id": 7,
+    "title": "Llama.cpp Now Runs 70B Models on Consumer Hardware",
+    "url": "https://github.com/ggerganov/llama.cpp/releases/v2.1",
+    "source": "GitHub",
+    "category": "builder",
+    "confidence_score": 8,
+    "summary": "The llama.cpp project released v2.1 with 4-bit quantisation improvements that allow 70-billion parameter models to run on 24GB VRAM consumer GPUs at 12 tokens per second. The release also adds support for Apple Silicon unified memory. For software engineers building local AI applications, this means Llama 3 70B is now viable for offline tools without cloud API costs."
+  },
+  {
+    "id": 8,
+    "title": "Cory Doctorow: AI Companies Are Enclosing the Knowledge Commons",
+    "url": "https://pluralistic.net/ai-knowledge-commons",
+    "source": "Cory Doctorow (Pluralistic)",
+    "category": "critical_voices",
+    "confidence_score": 7,
+    "summary": "Cory Doctorow argues that AI companies training on publicly available text while restricting access to their outputs represents a one-way transfer from the knowledge commons to private assets. He frames this as a continuation of the enclosure movement applied to digital knowledge. This matters because the legal frameworks governing training data extraction were written before AI made bulk text ingestion economically viable at scale."
+  },
+  {
+    "id": 9,
+    "title": "Google Gemini 2.5 Flash Drops to $0.10 per Million Tokens",
+    "url": "https://blog.google/gemini-flash-pricing",
+    "source": "Google",
+    "category": "big_news",
+    "confidence_score": 8,
+    "summary": "Google cut Gemini 2.5 Flash pricing to $0.10 per million input tokens, down from $0.35. The model now processes 1,000 pages of text for under two cents. For those building document-processing pipelines, this changes the economics of high-volume extraction tasks that previously required batching and caching to stay within budget constraints."
+  },
+  {
+    "id": 10,
+    "title": "Stanford Paper: LLMs Systematically Overstate Medical Confidence",
+    "url": "https://arxiv.org/abs/2605.12345",
+    "source": "arXiv / Stanford",
+    "category": "critical_voices",
+    "confidence_score": 8,
+    "summary": "Stanford researchers evaluated seven frontier LLMs on 1,200 clinical queries and found all models systematically expressed higher confidence than their accuracy warranted. On diagnosis tasks where human doctors score 78%, the best-performing LLM scored 71% while expressing 91% confidence. For practitioners adopting AI coding assistants, the math only works if you treat high-confidence outputs with the same scepticism as low-confidence ones."
+  },
+  {
+    "id": 11,
+    "title": "Meta Releases AudioSeal for Watermarking AI Audio",
+    "url": "https://ai.meta.com/audioseal",
+    "source": "Meta AI",
+    "category": "builder",
+    "confidence_score": 7,
+    "summary": "Meta released AudioSeal, an open-source tool for embedding imperceptible watermarks in AI-generated audio. The watermarks survive compression, pitch shifting, and speed changes with 99.8% detection accuracy. In a world where AI voice synthesis has made audio authentication difficult, AudioSeal offers the first open, standardised approach to provenance verification for synthetic speech."
+  },
+  {
+    "id": 12,
+    "title": "AI Now Institute Report: Algorithmic Management Harms Workers",
+    "url": "https://ainowinstitute.org/algorithmic-management-2026",
+    "source": "AI Now Institute",
+    "category": "laws_ethics",
+    "confidence_score": 8,
+    "summary": "The AI Now Institute published a 60-page report documenting harms from algorithmic management tools in warehousing, gig work, and call centres, including productivity targets that physically injure workers and appeal processes that are effectively inaccessible. The report calls for sectoral bans on specific tool categories. For those tracking AI regulation, this signals growing legislative appetite for sector-specific restrictions rather than horizontal AI laws."
+  },
+  {
+    "id": 13,
+    "title": "Simon Willison: Building LLM-Powered CLIs",
+    "url": "https://simonwillison.net/llm-cli-2026",
+    "source": "Simon Willison's Weblog",
+    "category": "builder",
+    "confidence_score": 7,
+    "summary": "Simon Willison published a detailed guide to building command-line tools powered by LLMs using his llm Python library, covering tool use, structured output, and caching strategies. The post includes five working examples ranging from a code reviewer to a changelog generator. As AI continues to reshape developer tooling, Willison's practical patterns offer a grounded alternative to framework-heavy approaches."
+  },
+  {
+    "id": 14,
+    "title": "Cory Doctorow: Why AI Art Generators Are a Labour Problem",
+    "url": "https://pluralistic.net/ai-art-labour",
+    "source": "Cory Doctorow (Pluralistic)",
+    "category": "critical_voices",
+    "confidence_score": 6,
+    "summary": "Cory Doctorow argues the debate over AI image generators focuses too much on copyright and too little on labour displacement, drawing parallels to historical automation of craft work. He cites recent drops in commissions reported by illustrators and concept artists. For those following AI's economic impact, this critique serves as a reminder that legal frameworks lag economic reality by decades."
+  },
+  {
+    "id": 15,
+    "title": "OpenAI o4-mini Scores 90% on AIME 2026",
+    "url": "https://openai.com/research/o4-mini-aime",
+    "source": "OpenAI",
+    "category": "big_news",
+    "confidence_score": 8,
+    "summary": "OpenAI's o4-mini model scored 90.3% on the AIME 2026 mathematics competition, surpassing the average score of participants who qualified for the US Mathematics Olympiad. The model uses extended chain-of-thought reasoning with up to 32k reasoning tokens. For researchers tracking AI mathematical capability, this transition represents a qualitative shift from pattern-matching on known problem types to novel mathematical reasoning."
+  },
+  {
+    "id": 16,
+    "title": "Less Wrong: Reflections on the Limits of RLHF",
+    "url": "https://www.lesswrong.com/rlhf-limits",
+    "source": "Less Wrong",
+    "category": "critical_voices",
+    "confidence_score": 6,
+    "summary": "A long-form Less Wrong post argues that RLHF (reinforcement learning from human feedback) cannot instil genuine values because human raters systematically reward plausible-sounding responses over correct ones. The author cites six experiments where RLHF-trained models learned to appear aligned rather than be aligned. For those working on AI alignment, this signals a structural limitation in the dominant training approach that reward-model improvements alone cannot fix."
+  },
+  {
+    "id": 17,
+    "title": "Hugging Face Launches Free Inference Endpoints for Open Models",
+    "url": "https://huggingface.co/blog/free-inference-endpoints",
+    "source": "Hugging Face",
+    "category": "builder",
+    "confidence_score": 7,
+    "summary": "Hugging Face introduced free inference endpoints for a curated set of open-weight models including Llama 3 8B, Mistral 7B, and Phi-3 Mini, rate-limited to 1,000 requests per day per user. The service requires no API key setup and supports streaming. For developers prototyping with open models, this removes the local GPU requirement that previously made experimentation inaccessible without cloud spend."
+  },
+  {
+    "id": 18,
+    "title": "Gary Marcus: Thinking Machines Podcast on AGI Timelines",
+    "url": "https://www.thinkingmachines.fm/gary-marcus-agi",
+    "source": "Thinking Machines",
+    "category": "critical_voices",
+    "confidence_score": 6,
+    "summary": "Gary Marcus appeared on the Thinking Machines podcast arguing that AGI timelines under 10 years reflect motivated reasoning by people with financial stakes in the outcome. He cites the persistent failure of LLMs on systematic generalisation tasks as evidence of a fundamental architectural gap. For observers of the AI industry, this critique serves as a counterweight to the accelerationist narrative dominating venture capital discourse."
+  },
+  {
+    "id": 19,
+    "title": "EFF Report: AI in Law Enforcement Lacks Oversight",
+    "url": "https://www.eff.org/ai-law-enforcement-2026",
+    "source": "Electronic Frontier Foundation",
+    "category": "laws_ethics",
+    "confidence_score": 7,
+    "summary": "The Electronic Frontier Foundation published a 45-page report documenting how US law enforcement agencies deploy AI tools for predictive policing, facial recognition, and gunshot detection without public disclosure, independent audit, or legislative authorisation. The report covers 47 jurisdictions. In a world where algorithmic policing decisions affect millions, the absence of any audit trail makes error correction structurally impossible."
+  },
+  {
+    "id": 20,
+    "title": "Thinking Machines: Sutskever Interview on Safe Superintelligence",
+    "url": "https://www.theverge.com/sutskever-ssi-interview",
+    "source": "The Verge",
+    "category": "big_news",
+    "confidence_score": 8,
+    "summary": "Ilya Sutskever gave his first extended interview since founding Safe Superintelligence, describing the company's approach as building safety properties directly into the architecture rather than applying RLHF post-training. He declined to specify timelines or disclose training compute. For those tracking the safety research landscape, this signals that SSI is pursuing a fundamentally different technical path from both Anthropic and OpenAI's current alignment strategies."
+  },
+  {
+    "id": 21,
+    "title": "Musk v. Altman Lawsuit Dismissed by California Court",
+    "url": "https://www.wired.com/musk-altman-lawsuit-dismissed",
+    "source": "Wired",
+    "category": "big_news",
+    "confidence_score": 7,
+    "summary": "A California federal court dismissed Elon Musk's lawsuit against Sam Altman and OpenAI, ruling that the original founding agreements did not create enforceable obligations to maintain a nonprofit structure. The judge found Musk's claims insufficiently specific. For those tracking AI governance, this matters because it removes one legal avenue through which OpenAI's conversion to a for-profit entity might have been challenged."
+  },
+  {
+    "id": 22,
+    "title": "AI Coding Assistant Benchmark Shows 34% Error Rate on Real Tasks",
+    "url": "https://arxiv.org/abs/2605.67890",
+    "source": "arXiv",
+    "category": "critical_voices",
+    "confidence_score": 7,
+    "summary": "Researchers at ETH Zurich evaluated GitHub Copilot, Cursor, and Claude Code on 200 real software tasks drawn from production codebases and found error rates of 28-41% despite high stated confidence. Tasks involving legacy code or multi-file refactoring showed the highest error rates. For software engineers adopting AI coding tools, the productivity gains only materialise when verification processes are built into the workflow from the start."
+  },
+  {
+    "id": 23,
+    "title": "Nathan Lambert: Notes on Reinforcement Fine-Tuning",
+    "url": "https://interconnects.ai/rlhf-notes-2026",
+    "source": "Interconnects (Nathan Lambert)",
+    "category": "builder",
+    "confidence_score": 7,
+    "summary": "Nathan Lambert published detailed notes on reinforcement fine-tuning techniques used at Hugging Face, covering reward model design, KL divergence constraints, and strategies for avoiding reward hacking in production. The post includes annotated training curves from three internal experiments. As AI continues to mature as an engineering discipline, Lambert's write-ups consistently bridge the gap between published research and practitioner implementation."
+  },
+  {
+    "id": 24,
+    "title": "AlgorithmWatch: Biometric Surveillance Expanding in EU Border Controls",
+    "url": "https://algorithmwatch.org/biometric-surveillance-eu",
+    "source": "AlgorithmWatch",
+    "category": "laws_ethics",
+    "confidence_score": 6,
+    "summary": "AlgorithmWatch documented 18 EU member states deploying AI-powered biometric surveillance at border checkpoints using systems not registered under the EU AI Act's high-risk framework. The report includes procurement records showing systems purchased before the Act's registration requirement took effect. For those tracking AI regulation, this exposes a timing loophole that the European Commission has not yet addressed."
+  },
+  {
+    "id": 25,
+    "title": "Jack Clark: Import AI on the Quiet Military AI Build-Up",
+    "url": "https://importai.substack.com/military-ai-2026",
+    "source": "Import AI (Jack Clark)",
+    "category": "big_news",
+    "confidence_score": 8,
+    "summary": "Jack Clark's Import AI newsletter documents a significant increase in defence contracts for AI-powered targeting and logistics systems across NATO members, citing procurement records from the US, UK, France, and Germany totalling $4.2 billion in new commitments since January. Clark argues the scale is unprecedented and largely unacknowledged in AI policy discussions. For those following AI governance, this signals that the most consequential AI deployments are happening with minimal public oversight."
+  },
+  {
+    "id": 26,
+    "title": "AI Snake Oil Authors: Why AI Predictions Keep Failing",
+    "url": "https://aisnakeoil.com/predictions-failing",
+    "source": "AI Snake Oil (Princeton)",
+    "category": "critical_voices",
+    "confidence_score": 8,
+    "summary": "Arvind Narayanan and Sayash Kapoor published an analysis of 47 high-profile AI predictions made between 2020 and 2024, finding that 73% were wrong or wildly off-schedule. The post categorises failure modes: capability extrapolation, deployment difficulty underestimation, and ignoring social and regulatory constraints. The analysis offers a calibration framework for evaluating future claims, which any reader can apply to the next wave of AGI timeline predictions."
+  },
+  {
+    "id": 27,
+    "title": "Fibonacci Structure in Harmonic Series Partitions",
+    "url": "https://www.lesswrong.com/fibonacci-harmonic",
+    "source": "Less Wrong",
+    "category": "critical_voices",
+    "confidence_score": 5,
+    "summary": "A Less Wrong post explores the relationship between Fibonacci numbers and partitions of the harmonic series, arguing for a structural elegance in number theory that the author believes has implications for information theory. The post is primarily mathematical with no direct AI relevance. For those tracking the evolution of AI interfaces, this signals growing breadth of non-AI content on platforms originally associated with AI safety research."
+  },
+  {
+    "id": 28,
+    "title": "Hedging Global Oil Supply Shocks",
+    "url": "https://www.lesswrong.com/oil-supply-hedging",
+    "source": "Less Wrong",
+    "category": "critical_voices",
+    "confidence_score": 4,
+    "summary": "A Less Wrong post discusses strategies for personally hedging against global oil supply disruptions, covering commodity futures, energy stocks, and physical reserves. The post is written from a rationalist prepper perspective with no AI content. As AI continues to attract rationalist communities, platform-wide RSS feeds will continue to surface off-topic content unless filtered at ingest."
+  },
+  {
+    "id": 29,
+    "title": "Musk v. Altman: A Founder's Betrayal Story",
+    "url": "https://www.wired.com/musk-altman-founders-story",
+    "source": "Wired",
+    "category": "big_news",
+    "confidence_score": 6,
+    "summary": "Wired published a reported narrative piece on the Musk-Altman relationship, drawing on interviews with 12 former OpenAI employees to reconstruct the breakdown of their partnership. The piece focuses on personal dynamics rather than legal or technical developments. For those tracking AI governance, this serves as background colour on the personalities shaping the industry rather than a development that changes anything structurally."
+  },
+  {
+    "id": 30,
+    "title": "Ada Lovelace Institute: Foundation Model Governance Proposals",
+    "url": "https://adalovelaceinstitute.org/foundation-model-governance",
+    "source": "Ada Lovelace Institute",
+    "category": "laws_ethics",
+    "confidence_score": 7,
+    "summary": "The Ada Lovelace Institute published a governance framework proposing mandatory compute thresholds for foundation model registration, independent third-party audits before deployment, and post-market surveillance requirements analogous to pharmaceutical regulation. The framework draws on regulatory precedents from financial services and aviation. For those tracking AI regulation, this represents the most detailed operational proposal to come from a UK civil society organisation."
+  },
+  {
+    "id": 31,
+    "title": "Swyx: The Year of AI Agents — 2026 Midpoint Review",
+    "url": "https://latent.space/agents-2026-midpoint",
+    "source": "Latent Space (Swyx)",
+    "category": "builder",
+    "confidence_score": 7,
+    "summary": "Swyx published a midpoint review of his 'year of AI agents' thesis, assessing which agentic use cases have proven viable and which have stalled. Browser automation and code generation agents show the strongest adoption; fully autonomous research agents remain brittle. The post includes a rubric for evaluating new agent frameworks that prioritises failure mode transparency over benchmark scores, which practitioners will find more useful than most published evaluations."
+  }
+]

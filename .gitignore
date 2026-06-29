@@ -1,0 +1,35 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Logs (auto-generated)
+logs/source_errors.log
+logs/source_state.json
+logs/token_usage.json
+logs/inbox_seen.json
+logs/style_check.log
+logs/ingest_filter.log
+logs/dedup.log
+logs/editorial_drops.log
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+
+# Claude Code internal
+.claude/worktrees/

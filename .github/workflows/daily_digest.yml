@@ -1,0 +1,102 @@
+name: Daily Broadsheet Digest
+
+# ============================================================
+# Runs at 1am UTC daily (2am London BST / 1am London GMT).
+# GitHub Actions' free-tier cron is best-effort and routinely
+# delays scheduled workflows by 1-4 hours during peak hours, so
+# we schedule well before the desired delivery window. 1am UTC
+# also keeps the actual start safely below the 6-7am UTC
+# congestion window on Gemini, Cerebras, and Groq free-tier
+# pools -- even with a multi-hour scheduling delay.
+# Single trigger works year-round -- no GMT/BST split needed.
+# ============================================================
+
+on:
+  schedule:
+    - cron: "0 1 * * *"   # 1am UTC = 2am London (summer/BST) / 1am London (winter/GMT)
+
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (print digest, don't deliver)"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+
+# Concurrency guard: only one run per day
+concurrency:
+  group: broadsheet-daily-${{ github.run_number }}
+  cancel-in-progress: false
+
+jobs:
+  run-digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Persist inbox Message-ID dedup file across runs. The inbox fetcher
+      # records definitively-handled emails here so transient failures (no
+      # URL extracted, broken body) get retried on the next run while still
+      # in the 48h window.
+      - name: Restore inbox seen-IDs cache
+        uses: actions/cache/restore@v4
+        with:
+          path: logs/inbox_seen.json
+          key: inbox-seen-${{ github.run_id }}
+          restore-keys: |
+            inbox-seen-
+
+      - name: Run Broadsheet digest
+        env:
+          # LLM
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          # News sources
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
+          PRODUCTHUNT_API_TOKEN: ${{ secrets.PRODUCTHUNT_API_TOKEN }}
+          # Delivery
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          NOTION_VOTES_DATABASE_ID: ${{ secrets.NOTION_VOTES_DATABASE_ID }}
+          NOTION_CANDIDATES_DATABASE_ID: ${{ secrets.NOTION_CANDIDATES_DATABASE_ID }}
+          NOTION_RUN_LOG_DATABASE_ID: ${{ secrets.NOTION_RUN_LOG_DATABASE_ID }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          BREVO_SMTP_LOGIN: ${{ secrets.BREVO_SMTP_LOGIN }}
+          BREVO_SMTP_KEY: ${{ secrets.BREVO_SMTP_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python main.py --dry-run
+          else
+            python main.py
+          fi
+
+      - name: Save inbox seen-IDs cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: logs/inbox_seen.json
+          key: inbox-seen-${{ github.run_id }}
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: broadsheet-logs-${{ github.run_id }}
+          path: logs/
+          retention-days: 7

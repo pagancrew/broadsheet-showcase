@@ -1,0 +1,208 @@
+# config/digest.yaml — Broadsheet
+# ============================================================
+# Controls digest format, delivery, and story selection.
+# Edit freely. Changes take effect on next run.
+# ============================================================
+
+
+# -----------------------------------------------------------
+# STORY SELECTION GUIDANCE
+# This is passed to the Newsroom Lead and Editor agents as
+# plain-English guidance. No number limits — they decide.
+# -----------------------------------------------------------
+# -----------------------------------------------------------
+# CONTENT FILTERS — user-editable, no code changes needed.
+# Changes take effect on the next run.
+# -----------------------------------------------------------
+filters:
+  # Topics to exclude from the digest entirely.
+  # Matched against story title + description (case-insensitive keyword search).
+  # A story matching ANY blocked keyword is removed before LLM scoring.
+  # Example: blocked_topics: ["CRISPR", "crypto", "NFT"]
+  blocked_topics: ["job posting", "we're hiring", "we are hiring", "now hiring", "open role", "open position", "apply now", "careers page", "join our team"]
+
+  # Sources to heavily deprioritize (not block — they still appear if nothing
+  # better exists). Matched against the story source field (exact string).
+  # Receives a -2.0 heuristic penalty. Use the source name as it appears
+  # in the digest, e.g. "MarkTechPost" or "Towards Data Science".
+  # Example: deprioritized_sources: ["MarkTechPost"]
+  deprioritized_sources: []
+
+  # Domains which have a known paywall. Stories from this section will get a [💸 Paywall] label and a checkbox in Notion.
+  known_paywalls:
+    - "wired.com"
+    - "ft.com"
+    - "economist.com"
+    - "newyorker.com"
+    - "bloomberg.com"
+
+  # Domains to hard-block before any LLM scoring.
+  # Stories whose URL contains any of these domains are dropped immediately.
+  blocked_domains:
+    - "linkedin.com"
+    - "reddit.com"
+    - "youtube.com"
+
+
+story_guidance: >
+  Prioritise quality and genuine newsworthiness over volume.
+  Big News is capped at 5 stories. Each other category targets up to 10.
+  If a category has a lean news day, its unused budget rolls to stronger
+  categories automatically — do not pad with low-quality content.
+  Ensure all four categories are represented unless the day's news
+  genuinely warrants otherwise. Builder content can run to 48 hours
+  since practitioner posts take time to gain traction.
+  Never include duplicate stories even if found by multiple agents.
+
+# Maximum total stories per digest. Acts as an overall ceiling.
+# Default: 35
+max_stories: 35
+
+# Hard cap for the Big News category. Kept intentionally low — quality over volume.
+# Default: 5
+big_news_max: 5
+
+# Per-category hard caps. Each category fills its cap from its highest-scored stories first.
+# Leftover passing stories pool for rollover (see rollover_max below).
+# Ceiling: big_news (5) + (8+2) × 3 = 35. Change these to tune category volume.
+category_max:
+  big_news: 5
+  critical_voices: 8
+  laws_ethics: 8
+  builder: 8
+
+# Maximum extra slots any single category may absorb via rollover from the leftover pool.
+# A category can receive up to (its category_max + rollover_max) stories on a strong day.
+# Default: 2
+rollover_max: 2
+
+# Minimum confidence score (1-10) for a story to make the digest.
+# Stories below this threshold are dropped by the Editor.
+# Lower = more stories, higher = stricter. Default: 6
+min_confidence_score: 6
+
+# How many days of Notion feedback to read for calibration.
+# Default: 7
+feedback_lookback_days: 7
+
+# Reserve one slot for the highest-quality story from any category not yet
+# represented in the digest that day. Prevents any category from being
+# silently dropped when it has a lean news day.
+# Default: true
+diversity_slot: true
+
+# Minimum confidence score for a story to qualify for the diversity slot.
+# Lower than min_confidence_score to ensure something always surfaces.
+# Default: 4
+diversity_min_quality: 6 #Edited to match overall min confidence score.
+
+# How many hours back a trusted-voice (must_include) post can be published and
+# still be pinned into the digest. Posts older than this fall into the normal
+# selection pool. Default was 48h; raised to 72h (Brief 21) to catch posts that
+# arrive late via Tavily or whose timestamp is slightly off.
+must_include_max_hours: 72
+
+# Heuristic scoring weights used in the first pass (before LLM rerank).
+# All values are multipliers or additive bonuses on a raw heuristic score.
+# Tune after a few runs — defaults are safe starting points.
+heuristic_weights:
+  engagement_weight: 1.0      # multiplier on normalised engagement (HN points, Reddit upvotes, GitHub stars)
+  recency_bonus_24h: 1.0      # additive bonus for stories published in the last 24h
+  recency_bonus_48h: 0.5      # additive bonus for stories published 24–48h ago
+  tag_affinity_weight: 1.0    # multiplier on the sum of tag weights from feedback calibration
+  llm_rerank_top_n: 12            # candidates per category (big_news, builder) passed to LLM rerank
+  llm_rerank_top_n_editorial: 20  # candidates per category (critical_voices, laws_ethics) — more lenient
+
+
+# Per-agent thinking level for Gemini (ignored by fallback/tertiary models).
+# high = deliberate multi-step reasoning before output (best for editorial judgment)
+# low  = faster, less deliberation (best for generative/creative tasks)
+agent_thinking:
+  newsroom_lead: "high"   # complex editorial judgment — deliberation over intuition
+  editor: "low"           # creative writing — fluency over deliberation
+
+
+# -----------------------------------------------------------
+# DELIVERY AND RECIPIENTS
+# Set enabled: true/false for each channel.
+# -----------------------------------------------------------
+delivery:
+  notion:
+    enabled: true
+    # Notion database ID — set in .env as NOTION_DATABASE_ID
+    # (The database must have the schema defined in README.md)
+  email:
+    enabled: true
+    recipients:
+      - email: "you@example.com"
+        subscriber_id: "You"
+    # Subject line for the email
+    subject: "BroadsheetAI — {date}"
+  # One-click feedback links in the email. Set to your own Vercel deployment URL once deployed.
+  # Leave empty to send emails without feedback links (fully backwards-compatible).
+  feedback_endpoint: ""
+
+
+# -----------------------------------------------------------
+# DIGEST FORMAT
+# Controls the structure of the written digest.
+# -----------------------------------------------------------
+format:
+  # Header line at the top of each digest
+  header: "Your daily AI digest — {date}"
+
+  # Category display names (shown in digest and Notion)
+  category_labels:
+    big_news: "Big News"
+    critical_voices: "Commentary"      # renamed from "Critical Voices" (Brief 20)
+    laws_ethics: "Law & Ethics"
+    builder: "Built & Released"
+    
+
+  # Order categories appear in digest (rearrange as you like)
+  category_order:
+    - big_news
+    - critical_voices 
+    - laws_ethics
+    - builder
+
+
+  # Include source URL in each story entry?
+  show_url: true
+
+  # Include the agent confidence score in Notion (not in email)?
+  show_confidence_in_notion: true
+
+
+# -----------------------------------------------------------
+# MODEL SETTINGS
+# Controls which models to use. Names are passed directly to
+# the API — check current model IDs at aistudio.google.com and
+# cloud.cerebras.ai if these stop working.
+# -----------------------------------------------------------
+models:
+  primary:
+    provider: "gemini"
+    model: "gemini/gemini-2.5-flash-lite"
+    # Gemini guidance suggests to keep temp at 1.0
+    temperature: 1.0
+
+  fallback:
+    provider: "cerebras"
+    model: "qwen-3-235b-a22b-instruct-2507"
+    temperature: 1.0
+
+  tertiary:
+    provider: "groq"
+    model: "llama-3.3-70b-versatile"
+    temperature: 1.0
+
+
+# -----------------------------------------------------------
+# SCHEDULING (informational — actual schedule is in GitHub Actions)
+# -----------------------------------------------------------
+schedule:
+  time: "01:00"
+  timezone: "UTC"
+  # Actual cron: see .github/workflows/daily_digest.yml (cron: "0 1 * * *" = 1am UTC,
+  # scheduled early to absorb GitHub Actions' best-effort cron delay)

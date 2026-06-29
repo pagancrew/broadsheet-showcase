@@ -1,0 +1,646 @@
+# config/sources.yaml — Broadsheet
+# ============================================================
+# Curated source list. Edit freely — add, remove, comment out.
+#
+# Three ways to add a source, in order of preference:
+#   1. rss_feeds         — site exposes a working RSS/Atom URL
+#   2. tavily_substack   — Substack-hosted (RSS blocked on cloud IPs)
+#   3. no_feed_sites     — site has no RSS or RSS is broken; fetched
+#                          via Tavily site-search instead
+#
+# Sources are tested each run. Failed sources appear under
+# "Source Alerts" in the digest and in logs/source_errors.log.
+# ============================================================
+#
+# Source-selection rubric — every enabled entry must clear ALL four:
+#   1. Alive in the last 30 days. Check the latest item before enabling.
+#      Dead feeds clog source_errors.log and waste a fetch slot.
+#   2. AI-relevant or AI-filterable. Whole-site feeds (e.g. Bellingcat,
+#      404 Media, Axios) need `ai_only_filter: true` to drop non-AI items
+#      at ingest.
+#   3. Editorial signal, not aggregation. No "Top 10 AI tools" SEO content,
+#      no auto-generated press-release mirrors, no LinkedIn-tier op-ed
+#      farms. The person or institution behind it must have a name.
+#   4. Adds something the current list doesn't already cover. Three more
+#      US Big-Tech blogs is worse than one strong non-US policy voice
+#      or one strong technical practitioner.
+#
+# Optional but strongly preferred:
+#   - Non-paywalled. Paywalled stories still surface but get a 💸 badge.
+#   - Named byline → add `byline: "Name"` (inherits the 2-per-author cap).
+#   - Geographic / institutional diversity (UK / EU / Asia / civil-society).
+# ============================================================
+
+
+# -----------------------------------------------------------
+# BIG NEWS
+# Mainstream outlets covering AI headlines
+# -----------------------------------------------------------
+big_news:
+  rss_feeds:
+    - name: "BBC Technology"
+      url: "https://feeds.bbci.co.uk/news/technology/rss.xml"
+      enabled: true
+
+    - name: "The Verge AI"
+      url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+      enabled: true
+
+    - name: "Wired AI"
+      url: "https://www.wired.com/feed/tag/ai/latest/rss"
+      enabled: true
+
+    - name: "MIT Technology Review"
+      url: "https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml"
+      enabled: true
+
+    - name: "TechCrunch AI"
+      url: "https://techcrunch.com/category/artificial-intelligence/feed/"
+      enabled: true
+
+    - name: "Ars Technica AI"
+      url: "https://feeds.arstechnica.com/arstechnica/technology-lab"
+      enabled: true
+
+    - name: "DeepMind Blog"
+      url: "https://deepmind.google/blog/rss.xml"
+      enabled: true
+
+    - name: "Stratechery"
+      url: "https://stratechery.com/feed/"
+      enabled: true
+
+    - name: "Engadget"
+      url: "https://www.engadget.com/category/news/feed/"
+      enabled: true
+
+    - name: "Financial Times"
+      url: "https://www.ft.com/rss/home/uk"
+      enabled: true
+
+    - name: "MIT Media Lab"
+      url: "https://www.media.mit.edu/feed.rss"
+      enabled: true
+
+    # --- New additions (2026-05-18) ---
+
+    - name: "The Decoder"
+      url: "https://the-decoder.com/feed/"
+      enabled: true  # German-led EU outlet; daily AI coverage, frequently cited on HN
+
+    - name: "Semafor"
+      url: "https://www.semafor.com/rss.xml"
+      enabled: true
+      ai_only_filter: true  # whole-site feed; server 405s on HEAD but 200s on GET
+
+    - name: "Axios"
+      url: "https://api.axios.com/feed/"
+      enabled: true
+      ai_only_filter: true  # whole-site feed; Ina Fried's AI scoops surface here
+
+    - name: "Rest of World"
+      url: "https://restofworld.org/feed/"
+      enabled: true
+      ai_only_filter: true  # whole-site feed; non-Western tech reporting
+
+    - name: "Platformer (Casey Newton)"
+      url: "https://www.platformer.news/rss/"
+      enabled: true
+      byline: "Casey Newton"  # partial paywall — paywall badge handled separately
+
+    # --- Disabled (RSS dead — see no_feed_sites for revival path) ---
+
+    - name: "Reuters Technology"
+      url: "https://feeds.reuters.com/reuters/technologyNews"
+      enabled: false  # DNS gone
+
+    - name: "Anthropic News"
+      url: "https://www.anthropic.com/news/rss.xml"
+      enabled: false  # RSS 404 (2026-05-02); revived via no_feed_sites below
+
+    - name: "OpenAI Blog"
+      url: "https://openai.com/blog/rss/"
+      enabled: false  # 403/404 ping-pong; revived via no_feed_sites below
+
+    - name: "Tech Africa News"
+      url: "https://techafricanews.com/feed/"
+      enabled: false  # too broad — general African tech, not AI-specific
+
+    - name: "Al Jazeera"
+      url: "https://www.aljazeera.com/xml/rss/all.xml"
+      enabled: false  # all-site feed — pulls general world news, not AI
+
+  no_feed_sites:
+    # Queries rewritten Brief 20 (2026-06-03): natural-language phrases, no
+    # operators. The domain (include_domains) carries the precision, so the
+    # phrase only needs to be a light topic nudge.
+    - name: "Anthropic News"
+      domain: "anthropic.com"
+      query: "new model, product announcement, or safety research"
+      enabled: true
+
+    - name: "OpenAI"
+      domain: "openai.com"
+      query: "new model, product announcement, or safety research"
+      enabled: true
+
+    - name: "Allen Institute for AI (AI2)"
+      domain: "allenai.org"
+      query: "new AI research or open model release"
+      enabled: true
+
+    # Mozilla.ai moved to Law & Ethics (Brief 20) — user treats it as a
+    # privacy/ethics voice, not headline news.
+
+  no_feed_default_queries:
+    - "AI announcement"
+    - "artificial intelligence"
+
+  tavily_queries:
+    # Brief 20 (2026-06-03): one tight intent per query, no operators.
+    # Big News owns "big strategic state/corporate moves"; legal/regulatory
+    # angles live in Law & Ethics to avoid the two categories colliding.
+    - 'frontier AI lab releases a new flagship model or signals a major leap in capabilities'
+    - 'major AI company IPO, merger, or large acquisition'
+    - 'large corporation deploys AI at a scale that reshapes its industry or the economy'
+    - 'national government AI strategy or integration of AI into public services'
+    - 'military adoption of artificial intelligence or autonomous weapons'
+
+
+# -----------------------------------------------------------
+# LAWS & ETHICS
+# Policy, regulation, governance, and ethics coverage
+# -----------------------------------------------------------
+laws_ethics:
+  rss_feeds:
+    - name: "AI Now Institute"
+      url: "https://ainowinstitute.org/feed"
+      enabled: true
+
+    - name: "Future of Life Institute"
+      url: "https://futureoflife.org/feed/"
+      enabled: true
+
+    - name: "AlgorithmWatch"
+      url: "https://algorithmwatch.org/en/feed/"
+      enabled: true
+
+    - name: "Ada Lovelace Institute"
+      url: "https://www.adalovelaceinstitute.org/feed/"
+      enabled: true
+
+    - name: "Electronic Frontier Foundation"
+      url: "https://www.eff.org/rss/updates.xml"
+      enabled: true
+
+    - name: "Tech Policy Press"
+      url: "https://www.techpolicy.press/feed/"
+      enabled: true
+
+    - name: "Centre for Information Resilience"
+      url: "https://www.info-res.org/feed/"
+      enabled: true
+
+    - name: "Stanford Cyber Policy Center"
+      url: "https://cyber.fsi.stanford.edu/rss.xml"
+      enabled: true
+
+    - name: "Bellingcat feed"
+      url: "https://www.bellingcat.com/atom"
+      enabled: true
+      ai_only_filter: true  # whole-site feed; drop non-AI items at ingest
+
+    - name: "Bellingcat atom"
+      url: "https://www.bellingcat.com/feed"
+      enabled: true
+      ai_only_filter: true
+
+    - name: "EU Institute for Security Studies"
+      url: "https://www.iss.europa.eu/rss.xml"
+      enabled: true
+
+    - name: "Oxford Internet Institute"
+      url: "https://www.oii.ox.ac.uk/feed/atom/"
+      enabled: true
+
+    # --- New additions (2026-05-18) ---
+
+    - name: "The Markup"
+      url: "https://themarkup.org/feeds/rss.xml"
+      enabled: true  # algorithmic-accountability investigative journalism
+
+    - name: "Center for Democracy & Technology (CDT)"
+      url: "https://cdt.org/feed/"
+      enabled: true  # US digital-rights policy shop with active AI workstream
+
+    - name: "Montreal AI Ethics Institute"
+      url: "https://montrealethics.ai/feed/"
+      enabled: true  # non-US ethics research; weekly briefings
+
+    - name: "Programmable Mutter (Henry Farrell)"
+      url: "https://www.programmablemutter.com/feed"
+      enabled: true
+      byline: "Henry Farrell"  # political-economy lens on AI governance
+
+    # --- Disabled (broken RSS — revived via no_feed_sites below) ---
+
+    - name: "Brookings AI"
+      url: "https://www.brookings.edu/topic/artificial-intelligence/feed/"
+      enabled: false  # persistent XML parse error
+
+    - name: "Lawfare AI"
+      url: "https://www.lawfaremedia.org/topics/artificial-intelligence/feed"
+      enabled: false  # 403 Forbidden
+
+    - name: "Stanford HAI"
+      url: "https://hai.stanford.edu/news/rss"
+      enabled: false  # XML parse error
+
+  no_feed_sites:
+    # Queries rewritten Brief 20 (2026-06-03): NL phrases, no operators.
+    - name: "Brookings AI"
+      domain: "brookings.edu"
+      query: "AI governance, regulation, or policy analysis"
+      enabled: true
+
+    - name: "Stanford HAI"
+      domain: "hai.stanford.edu"
+      query: "human-centered AI research or policy"
+      enabled: true
+
+    - name: "Lawfare AI"
+      domain: "lawfaremedia.org"
+      query: "AI and national security"
+      enabled: true
+
+    - name: "Mozilla Foundation"
+      domain: "blog.mozilla.org"
+      query: "privacy, data use, or concerns about AI"
+      enabled: true
+
+    # Mozilla.ai moved here from Big News (Brief 20) — both Mozilla arms now
+    # covered together for their privacy/data-use/ethics commentary.
+    - name: "Mozilla.ai"
+      domain: "blog.mozilla.ai"
+      query: "privacy, data use, or concerns about AI"
+      enabled: true
+
+    # Brief 21 (2026-06-04): Guardian API dropped (over-constrained query returned 0
+    # results silently). Now routed via Tavily no_feed_sites like every other source.
+    - name: "The Guardian"
+      domain: "theguardian.com"
+      query: "AI regulation, policy, ethics, or law"
+      enabled: true
+
+  no_feed_default_queries:
+    - "AI policy"
+    - "AI regulation"
+
+  guardian_api:
+    enabled: false
+    # Brief 21 (2026-06-04): disabled. Over-constrained query (section=technology
+    # AND tag=law/law) returned 0 results silently. Guardian now fetched via
+    # Tavily no_feed_sites above. See docs/DECISIONS.md ADR-051.
+    # Original config kept for reference:
+    sections:
+      - "technology"
+    tags:
+      - "technology/artificial-intelligence"
+      - "law/law"
+    keywords:
+      - "AI regulation"
+      - "artificial intelligence law"
+      - "AI Act"
+      - "AI ethics"
+
+  tavily_queries:
+    # Brief 20 (2026-06-03): one intent per query, no operators. The old
+    # trusted-outlets slot (techpolicy.press / cdt.org / themarkup.org) was
+    # dropped — all three already arrive via RSS.
+    - 'government passes a new artificial intelligence law or AI act'
+    - 'first major enforcement action or penalty under an AI law'
+    - 'court ruling on AI copyright, training data, or open-source licensing'
+    - 'lawsuit or ruling over AI violating individual rights'
+    - 'new academic framework or prominent voice on AI ethics'
+    - 'company or government moves to define or enforce AI ethics'
+    - 'privacy or data-protection decision on how AI handles personal data'
+    - 'data colonialism or bias in AI systems'
+
+
+# -----------------------------------------------------------
+# BUILDER / TECHNICAL
+# Practitioner content: projects, tools, tutorials, repos
+# -----------------------------------------------------------
+builder:
+  hacker_news:
+    enabled: false  # paused (Brief 20) — the "Show HN" project firehose was
+                    # too noisy to surface signal; category refocused on
+                    # practitioner guidance, tooling, and model comparisons.
+
+  reddit_rss:
+    enabled: false  # paused
+
+  personal_blogs:
+    enabled: true
+    feeds:
+      - name: "Simon Willison's Weblog"
+        url: "https://simonwillison.net/atom/everything/"
+        byline: "Simon Willison"
+        enabled: true
+
+      - name: "Andrej Karpathy"
+        url: "https://karpathy.bearblog.dev/feed/"
+        byline: "Andrej Karpathy"
+        enabled: true
+
+      - name: "MarkTechPost"
+        url: "https://www.marktechpost.com/feed/"
+        enabled: true  # high-volume; deprioritize via digest.yaml filter if noisy
+
+      # --- New additions (2026-05-18) ---
+
+      - name: "Hamel Husain"
+        url: "https://hamel.dev/index.xml"
+        byline: "Hamel Husain"
+        enabled: true  # LLM evaluation specialist
+
+      - name: "Eugene Yan"
+        url: "https://eugeneyan.com/rss/"
+        byline: "Eugene Yan"
+        enabled: true  # ML systems / RAG / evals practitioner
+
+      - name: "Lilian Weng"
+        url: "https://lilianweng.github.io/index.xml"
+        byline: "Lilian Weng"
+        enabled: true  # infrequent poster, gold-standard surveys when active
+
+      - name: "Sebastian Raschka — Ahead of AI"
+        url: "https://magazine.sebastianraschka.com/feed"
+        byline: "Sebastian Raschka"
+        enabled: true  # LLM training deep dives
+
+      - name: "Jay Alammar"
+        url: "https://jalammar.github.io/feed.xml"
+        byline: "Jay Alammar"
+        enabled: true  # rare poster but high-impact explanations when active
+
+      - name: "Chip Huyen"
+        url: "https://huyenchip.com/feed.xml"
+        byline: "Chip Huyen"
+        enabled: true  # ML systems / production AI
+
+      # --- Disabled ---
+
+      - name: "Hugging Face Blog"
+        url: "https://huggingface.co/blog/feed.xml"
+        enabled: false  # no official RSS — revived via no_feed_sites
+
+      - name: "The Batch (Andrew Ng)"
+        url: "https://www.deeplearning.ai/the-batch/feed/"
+        enabled: false  # 404 — feed URL changed; revived via no_feed_sites
+
+      - name: "Towards Data Science"
+        url: "https://towardsdatascience.com/feed"
+        enabled: false  # paused — quality variance too high
+
+      - name: "arXiv cs.AI"
+        url: "http://arxiv.org/rss/cs.AI"
+        enabled: false  # paused — preprints aren't news; would flood the pool
+
+      - name: "arXiv cs.CL"
+        url: "http://arxiv.org/rss/cs.CL"
+        enabled: false  # paused — same
+
+  github_trending:
+    enabled: false  # paused
+
+  product_hunt:
+    enabled: false  # paused
+
+  no_feed_sites:
+    # Brief 20 (2026-06-03): category refocused on build/use guidance, tooling,
+    # and model comparisons — anchored on trusted makers, not the project
+    # firehose. Anthropic/OpenAI also appear in Big News, but with distinctly
+    # different queries (announcements there, developer guidance here).
+    - name: "Anthropic (build guidance)"
+      domain: "anthropic.com"
+      query: "building with Claude, engineering best practices, or developer guidance"
+      enabled: true
+
+    - name: "OpenAI (build guidance)"
+      domain: "openai.com"
+      query: "building with the API, developer guidance, or best practices"
+      enabled: true
+
+    - name: "Nvidia Developer"
+      domain: "developer.nvidia.com"
+      query: "AI developer tools, libraries, or technical guidance"
+      enabled: true
+
+    - name: "Cursor"
+      domain: "cursor.com"
+      query: "new features or guidance for AI-assisted coding"
+      enabled: true
+
+    - name: "Groq"
+      domain: "groq.com"
+      query: "fast inference, smaller models, or developer announcements"
+      enabled: true
+
+    - name: "Hugging Face Blog"
+      domain: "huggingface.co"
+      query: "model release, build guide, or research"
+      enabled: true
+
+    - name: "Artificial Analysis"
+      domain: "artificialanalysis.ai"
+      query: "AI model benchmark or comparison"
+      enabled: true
+
+    - name: "Epoch AI"
+      domain: "epoch.ai"
+      query: "AI scaling, compute, or capability trends"
+      enabled: true
+
+    # The Batch (Andrew Ng) moved to Commentary (Brief 20).
+
+  no_feed_default_queries:
+    - "AI tool"
+    - "open source AI"
+
+  tavily_queries:
+    # Brief 20 (2026-06-03): refocused on guidance, dev research, and model
+    # comparisons. The old source-anchored slot (simonwillison/karpathy/hamel)
+    # was dropped — those arrive via RSS — and the HF-blog slot was dropped as
+    # it duplicates the Hugging Face no_feed_sites entry above.
+    - 'new best practices or guidance for building with large language models'
+    - 'research paper on AI for software development or programming'
+    - 'comparison or benchmark of leading AI models'
+
+
+# -----------------------------------------------------------
+# CRITICAL VOICES
+# Sceptics, critics, and accountability journalism
+# -----------------------------------------------------------
+critical_voices:
+  rss_feeds:
+    - name: "AI Snake Oil (Princeton)"
+      url: "https://www.aisnakeoil.com/feed"
+      enabled: true
+
+    - name: "Cory Doctorow (Pluralistic)"
+      url: "https://pluralistic.net/feed/"
+      enabled: true
+      byline: "Cory Doctorow"
+
+    - name: "404 Media"
+      url: "https://www.404media.co/rss/"
+      enabled: true
+      ai_only_filter: true  # whole-site feed
+
+    - name: "Disconnect (Paris Marx)"
+      url: "https://disconnect.blog/rss/"
+      enabled: true
+      byline: "Paris Marx"
+
+    - name: "Less Wrong"
+      url: "https://www.lesswrong.com/feed.xml"
+      enabled: true
+      ai_only_filter: true
+
+    - name: "Toby Ord"
+      url: "https://www.tobyord.com/writing?format=rss"
+      enabled: true
+      byline: "Toby Ord"
+
+    # --- New additions (2026-05-18) ---
+
+    - name: "Don't Worry About the Vase (Zvi Mowshowitz)"
+      url: "https://thezvi.substack.com/feed"
+      enabled: true
+      byline: "Zvi Mowshowitz"
+      # Substack — fallback via tavily_substack below if RSS gets blocked
+
+    - name: "Where's Your Ed At (Edward Zitron)"
+      url: "https://www.wheresyoured.at/rss/"
+      enabled: true
+      byline: "Edward Zitron"
+
+    - name: "Blood in the Machine (Brian Merchant)"
+      url: "https://www.bloodinthemachine.com/feed"
+      enabled: true
+      byline: "Brian Merchant"
+
+    - name: "Citation Needed (Molly White)"
+      url: "https://www.citationneeded.news/rss/"
+      enabled: true
+      byline: "Molly White"
+
+    - name: "The Convivial Society (L.M. Sacasas)"
+      url: "https://theconvivialsociety.substack.com/feed"
+      enabled: true
+      byline: "L.M. Sacasas"
+
+    - name: "Baldur Bjarnason"
+      url: "https://www.baldurbjarnason.com/feed.xml"
+      enabled: true
+      byline: "Baldur Bjarnason"
+
+    # --- Disabled (RSS dead — see no_feed_sites for revival) ---
+
+    - name: "DAIR.AI / Timnit Gebru"
+      url: "https://www.dair-institute.org/blog/rss.xml"
+      enabled: false  # 404
+
+    - name: "The Register AI"
+      url: "https://www.theregister.com/headlines/ai/rss"
+      enabled: false  # 404
+
+  no_feed_sites:
+    # Brief 20 (2026-06-03): NL phrases, no operators.
+    - name: "DAIR Institute"
+      domain: "dair-institute.org"
+      query: "research on AI harms, bias, or labor exploitation"
+      enabled: true
+
+    - name: "The Register AI"
+      domain: "theregister.com"
+      query: "critical or sceptical reporting on AI"
+      enabled: true
+
+    # The Batch (Andrew Ng) moved here from Builder (Brief 20) — treated as a
+    # general commentary feed. Has an explicit query because this category's
+    # default ("AI criticism / AI harm") would badly mis-serve it.
+    - name: "The Batch (Andrew Ng)"
+      domain: "deeplearning.ai"
+      query: "weekly AI developments and commentary"
+      enabled: true
+
+  no_feed_default_queries:
+    - "AI criticism"
+    - "AI harm"
+
+  tavily_queries:
+    # Brief 20 (2026-06-03): category broadened to "Commentary". The two
+    # source-anchored slots (already fed via RSS/Substack) were dropped and the
+    # single harm slot was split into the distinct intents below — organisational
+    # risk, the psychology of AI use, and AI alignment/behaviour research. All
+    # are deliberately anchored on research/evidence, not broad punditry.
+    - 'risks and unintended consequences of organizations adopting AI'
+    - 'research on how AI use affects human cognition and psychology'
+    - 'evidence that AI products are designed to be addictive or maximize engagement'
+    - 'AI alignment and safety research findings'
+    - 'surprising, emergent, or unexplained AI model behavior'
+
+
+# -----------------------------------------------------------
+# SUBSTACK VIA TAVILY
+# Substack blocks cloud IPs (GitHub Actions / AWS) with 403 on RSS.
+# These sources are fetched via Tavily search instead — no inbox needed.
+#
+# To add a new source: add an entry with domain + category.
+# source_name is optional — omit to use domain as display name.
+# -----------------------------------------------------------
+tavily_substack:
+  enabled: true
+  default_category: "Commentary"
+  # priority: must_include — fresh posts (≤48h) from these sources bypass the
+  # normal candidate funnel and are pinned directly into the digest (1 per voice).
+  sources:
+    - domain: "importai.substack.com"
+      source_name: "Import AI (Jack Clark)"
+      category: "Big News"
+      priority: must_include
+    - domain: "interconnects.ai"
+      source_name: "Interconnects (Nathan Lambert)"
+      category: "Built & Released"
+      priority: must_include
+    - domain: "latent.space"
+      source_name: "Latent Space (Swyx)"
+      category: "Built & Released"
+      priority: must_include
+    - domain: "garymarcus.substack.com"
+      source_name: "Gary Marcus"
+      category: "Commentary"
+      priority: must_include
+    # --- New (2026-05-18): fallback paths for Substack-hosted RSS adds ---
+    - domain: "thezvi.substack.com"
+      source_name: "Don't Worry About the Vase (Zvi Mowshowitz)"
+      category: "Commentary"
+      priority: must_include
+    - domain: "magazine.sebastianraschka.com"
+      source_name: "Ahead of AI (Sebastian Raschka)"
+      category: "Built & Released"
+      priority: must_include
+    - domain: "wheresyoured.at"
+      source_name: "Where's Your Ed At (Edward Zitron)"
+      category: "Commentary"
+      priority: must_include
+    - domain: "bloodinthemachine.com"
+      source_name: "Blood in the Machine (Brian Merchant)"
+      category: "Commentary"
+      priority: must_include
+    - domain: "theconvivialsociety.substack.com"
+      source_name: "The Convivial Society (L.M. Sacasas)"
+      category: "Commentary"
+      priority: must_include
