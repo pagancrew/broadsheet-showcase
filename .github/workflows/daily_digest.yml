@@ -1,21 +1,25 @@
 name: Daily Broadsheet Digest
 
 # ============================================================
-# Runs at 1am UTC daily (2am London BST / 1am London GMT).
-# GitHub Actions' free-tier cron is best-effort and routinely
-# delays scheduled workflows by 1-4 hours during peak hours, so
-# we schedule well before the desired delivery window. 1am UTC
-# also keeps the actual start safely below the 6-7am UTC
-# congestion window on Gemini, Cerebras, and Groq free-tier
-# pools -- even with a multi-hour scheduling delay.
-# Single trigger works year-round -- no GMT/BST split needed.
+# Daily digest workflow.
+#
+# In the production (private) deployment this runs on a schedule:
+#     cron: "0 1 * * *"   # 1am UTC
+# It is scheduled early because GitHub Actions' free-tier cron is
+# best-effort and routinely delays scheduled workflows by 1-4 hours,
+# and 1am UTC keeps the actual start below the 6-7am UTC congestion
+# window on the Gemini/Cerebras/Groq free-tier pools. A single UTC
+# trigger works year-round with no GMT/BST split.
+#
+# NOTE: the schedule is intentionally DISABLED in this public
+# showcase repo, which has no API-key secrets configured, so any
+# scheduled run would only fail. Use the manual "Run workflow"
+# button below if you have added your own secrets.
 # ============================================================
 
 on:
-  schedule:
-    - cron: "0 1 * * *"   # 1am UTC = 2am London (summer/BST) / 1am London (winter/GMT)
-
-  # Allow manual trigger from GitHub Actions UI
+  # Manual trigger only in this showcase. The production repo also
+  # runs on `schedule: cron "0 1 * * *"` (see note above).
   workflow_dispatch:
     inputs:
       dry_run:
